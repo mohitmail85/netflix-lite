@@ -1,31 +1,24 @@
 {
-  "name": "netflix-lite",
+  "name": "netflix-lite-monorepo",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-router-dom": "^7.12.0"
+    "dev:host": "pnpm --filter @netflix-lite/host dev",
+    "dev:search": "pnpm --filter @netflix-lite/search dev",
+    "dev:all": "pnpm --parallel --filter @netflix-lite/host --filter @netflix-lite/search dev",
+    "build:shared": "pnpm --filter @netflix-lite/shared-* build",
+    "build:host": "pnpm --filter @netflix-lite/host build",
+    "build:search": "pnpm --filter @netflix-lite/search build",
+    "build:all": "pnpm build:shared && pnpm --parallel --filter @netflix-lite/host --filter @netflix-lite/search build",
+    "lint": "pnpm --recursive lint",
+    "preview:host": "pnpm --filter @netflix-lite/host preview",
+    "preview:search": "pnpm --filter @netflix-lite/search preview",
+    "clean": "pnpm --recursive exec rm -rf dist node_modules",
+    "install:all": "pnpm install"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
-    "@types/react": "^19.2.5",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
-    "eslint": "^9.39.1",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.24",
-    "globals": "^16.5.0",
-    "typescript": "~5.9.3",
-    "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4"
+    "typescript": "~5.9.3"
   }
 }

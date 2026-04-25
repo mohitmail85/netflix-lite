@@ -1,0 +1,54 @@
+.movie-row {
+  margin-bottom: 40px;
+  padding: 0 4%;
+}
+
+.movie-row-title {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+}
+
+.movie-row-container {
+  position: relative;
+}
+
+.movie-row-content {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  padding: 10px 0;
+  margin: -10px 0;
+}
+
+.movie-row-content::-webkit-scrollbar {
+  height: 8px;
+}
+
+.movie-row-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.movie-row-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.movie-row-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .movie-row {
+    margin-bottom: 30px;
+  }
+
+  .movie-row-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+}

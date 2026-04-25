@@ -1,0 +1,9 @@
+.app {
+  min-height: 100vh;
+  background-color: #000;
+}
+
+.main-content {
+  position: relative;
+  z-index: 1;
+}

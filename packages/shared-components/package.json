@@ -1,0 +1,44 @@
+{
+  "name": "@netflix-lite/shared-components",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./Header": "./src/Header/Header.tsx",
+    "./MovieCard": "./src/MovieCard/MovieCard.tsx",
+    "./MovieRow": "./src/MovieRow/MovieRow.tsx",
+    "./Header/styles": "./src/Header/Header.css",
+    "./MovieCard/styles": "./src/MovieCard/MovieCard.css",
+    "./MovieRow/styles": "./src/MovieRow/MovieRow.css"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "echo 'No build needed - source exports'",
+    "clean": "echo 'No clean needed'"
+  },
+  "dependencies": {
+    "@netflix-lite/shared-types": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.12.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.12.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4"
+  }
+}

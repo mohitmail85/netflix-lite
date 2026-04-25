@@ -1,0 +1,73 @@
+name: Deploy Host App to AWS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/host/**'
+      - 'packages/shared-*/**'
+      - '.github/workflows/deploy-host.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Build and Deploy Host App
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shared packages
+        run: pnpm build:shared
+
+      - name: Run linter (host)
+        run: pnpm --filter @netflix-lite/host lint
+
+      - name: Build host app
+        env:
+          VITE_SEARCH_REMOTE_URL: https://${{ secrets.CLOUDFRONT_DOMAIN }}/search/assets/remoteEntry.js
+        run: pnpm build:host
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to S3 (root)
+        run: |
+          aws s3 sync packages/host/dist/ s3://${{ secrets.AWS_S3_BUCKET }} --delete --exclude "search/*" --cache-control max-age=31536000,public
+          aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/index.html s3://${{ secrets.AWS_S3_BUCKET }}/index.html --metadata-directive REPLACE --cache-control max-age=0,no-cache,no-store,must-revalidate --content-type text/html
+
+      - name: Invalidate CloudFront cache (root paths)
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/" "/index.html" "/assets/*"

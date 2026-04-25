@@ -10,7 +10,12 @@
       "WebFetch(domain:github.com)",
       "Bash(npm install:*)",
       "Bash(npm uninstall:*)",
-      "Bash(fnm use:*)"
+      "Bash(fnm use:*)",
+      "Bash(pnpm --version:*)",
+      "Bash(pnpm build:shared:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm install:*)"
     ]
   }
 }
